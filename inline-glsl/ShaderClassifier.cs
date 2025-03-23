@@ -89,7 +89,7 @@ namespace inline_glsl
 		}
 		public enum ShaderType
 		{
-			Invalid = 0, Vertex, Fragment, Compute
+			Invalid = 0, Vertex, Fragment, Compute, TessellationControl, TessellationEvaluation, Geometry
 		}
 
 		public class GlslData
@@ -241,8 +241,9 @@ namespace inline_glsl
 			//use a comment like "// vertex shader:" to denote where glsl should be highlighted
 			var comment_match = Regex.Match(
 				span.GetText(),
-				"\\/\\/[ \t]*(vertex|fragment|compute)[ \t]+shader[ \t]*:?|\\/\\*[ \t]*(vertex|fragment|compute)[ \t]+shader[ \t]*:?\\*\\/",
-				RegexOptions.IgnoreCase
+                //"\\/\\/[ \t]*(vertex|fragment|compute|tesc|tese|geometry)[ \t]+shader[ \t]*:?|\\/\\*[ \t]*(vertex|fragment|compute|tesc|tese|geometry)[ \t]+shader[ \t]*:?\\*\\/",
+                "\\/\\/[ \t]*(vertex|fragment|compute|tesc|tese|geometry|tessellation[ \t]+control|tessellation[ \t]+evaluation)[ \t]+shader[ \t]*:?|\\/\\*[ \t]*(vertex|fragment|compute|tesc|tese|geometry|tessellation[ \t]+control|tessellation[ \t]+evaluation)[ \t]+shader[ \t]*:?\\*\\/",
+                RegexOptions.IgnoreCase
 			);
 
 			if (comment_match.Success)
@@ -256,6 +257,9 @@ namespace inline_glsl
 				if (comment_match.Value.ToLower().Contains("vertex")) shader_type = ShaderType.Vertex;
 				if (comment_match.Value.ToLower().Contains("fragment")) shader_type = ShaderType.Fragment;
 				if (comment_match.Value.ToLower().Contains("compute")) shader_type = ShaderType.Compute;
+				if (comment_match.Value.ToLower().Contains("tesc") || comment_match.Value.ToLower().Contains("tessellation control")) shader_type = ShaderType.TessellationControl;
+				if (comment_match.Value.ToLower().Contains("tese") || comment_match.Value.ToLower().Contains("tessellation evaluation")) shader_type = ShaderType.TessellationEvaluation;
+				if (comment_match.Value.ToLower().Contains("geometry")) shader_type = ShaderType.Geometry;
 				// now find the shader string
 				var index = span.Start + comment_match.Index + comment_match.Length;
 				// find the opening quotes

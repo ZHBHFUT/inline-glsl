@@ -162,6 +162,9 @@ extern "C" __declspec(dllexport) void compile_shader(const char* shader, int sta
     case 1: lang = EShLangVertex; break;
     case 2: lang = EShLangFragment; break;
     case 3: lang = EShLangCompute; break;
+    case 4: lang = EShLangTessControl; break;
+    case 5: lang = EShLangTessEvaluation; break;
+    case 6: lang = EShLangGeometry; break;
     case 0: /*intentional fallthrough*/
     default: break;
     }
